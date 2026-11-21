@@ -208,7 +208,7 @@ Secara fungsional, Sonara memadukan mesin rekomendasi, antrean, dan animasi liri
 
 ---
 
-## 🔌 Dokumentasi API Internal
+## Dokumentasi API Internal
 
 Seluruh pemanggilan ke `ytmusic-api` dan `LRCLIB` dijalankan pada **Next.js API Routes (Node.js runtime)** sehingga aman dari batas CORS browser dan dilengkapi fallback otomatis.
 
