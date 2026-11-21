@@ -35,7 +35,7 @@
 
 ---
 
-## ✨ Tentang Sonara
+## Tentang Sonara
 
 **Sonara** adalah aplikasi web klien **YouTube Music** modern berbasis **Next.js App Router** yang menggabungkan pengalaman desain **Material 3 Expressive** & **Pure Black AMOLED**, **Dynamic Color** adaptif dari sampul album, **Dynamic Island Pro** (dengan dukungan *Background Picture-in-Picture*), serta efek opt-in **Physics Liquid Glass** (menggunakan simulasi refraksi Hukum Snell + filter SVG `feDisplacementMap` + *specular rim highlight*).
 
@@ -45,7 +45,7 @@ Secara fungsional, Sonara memadukan mesin rekomendasi, antrean, dan animasi liri
 
 ---
 
-## 🖼️ Galeri Preview
+## Galeri Preview
 
 ### Tampilan Desktop (`1440×900`)
 
@@ -117,7 +117,7 @@ Secara fungsional, Sonara memadukan mesin rekomendasi, antrean, dan animasi liri
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## Teknologi yang Digunakan
 
 | Kategori | Teknologi / Paket | Versi | Kegunaan di Project |
 | :--- | :--- | :--- | :--- |
@@ -136,7 +136,7 @@ Secara fungsional, Sonara memadukan mesin rekomendasi, antrean, dan animasi liri
 
 ---
 
-## 🏗️ Arsitektur & Struktur Direktori
+## Arsitektur & Struktur Direktori
 
 ```text
 .
@@ -222,7 +222,7 @@ Seluruh pemanggilan ke `ytmusic-api` dan `LRCLIB` dijalankan pada **Next.js API 
 
 ---
 
-## 💻 Instalasi & Menjalankan Lokal
+## Instalasi & Menjalankan Lokal
 
 ### Prasyarat
 - **Node.js** versi `20.x` atau lebih baru
@@ -272,7 +272,7 @@ npm run clean
 
 ---
 
-## 🧪 Pengujian (Unit Test)
+## Pengujian (Unit Test)
 
 Logika inti aplikasi dipisahkan dari komponen UI dan diuji menggunakan test runner bawaan Node (`node:test` + `node:assert/strict`) melalui `tsx`.
 
@@ -294,7 +294,7 @@ npx --yes tsx --test \
 
 ---
 
-## ☁️ Deployment
+## Deployment
 
 ### Deploy ke Vercel
 Repositori ini sudah menyertakan konfigurasi [`vercel.json`](./vercel.json) dengan batas waktu eksekusi optimal (`maxDuration: 25` detik) untuk seluruh endpoint `app/api/music/**/*.ts`:
@@ -313,7 +313,7 @@ npm run start
 
 ---
 
-## 🌐 Komunitas & Kredit
+## Komunitas & Kredit
 
 **POWERED BY SANN404 FORUM GROUP**
 
@@ -331,7 +331,7 @@ npm run start
 
 ---
 
-## 📄 Lisensi
+## Lisensi
 
 Proyek ini dilisensikan di bawah **Apache License 2.0**. Lihat berkas [`LICENSE`](./LICENSE) untuk rincian lengkap mengenai hak penggunaan, modifikasi, dan distribusi.
 
