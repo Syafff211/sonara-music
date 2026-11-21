@@ -67,7 +67,7 @@ Secara fungsional, Sonara memadukan mesin rekomendasi, antrean, dan animasi liri
 
 ---
 
-## 🚀 Fitur Utama
+## Fitur Utama
 
 ### 1. Pemutar Musik & Kontrol Ekspresif (`NowPlayingSheet`, `MiniPlayer`, `PlayerSlider`)
 - **Pemutaran Langsung YouTube IFrame Player API**: Mendukung mode audio-fokus maupun tampilan **Video Stage** langsung di dalam `Now Playing`.
