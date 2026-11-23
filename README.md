@@ -185,6 +185,9 @@ Di dashboard Supabase → Authentication → URL Configuration, tambahkan
 `https://<domain>/auth/callback`, `https://<domain>/reset-password`, dan
 `com.easvarafy.app://auth/callback` (deep link APK) ke **Redirect URLs**.
 
+Panduan langkah-demi-langkah mengaktifkan tombol Google (Google Cloud Console →
+Supabase → khusus APK): **[`docs/AUTH_SETUP.md`](./docs/AUTH_SETUP.md)**.
+
 ---
 
 ## Teknologi yang Digunakan
