@@ -21,6 +21,7 @@ import {
   registerLiquidGlassFilter,
 } from './LiquidGlassSurface';
 import { useMusic } from './MusicProvider';
+import { MobileAccountButton } from './auth/AccountMenu';
 import type { NavTab } from '@/lib/metrolist/types';
 import { cn } from '@/lib/utils';
 
@@ -61,24 +62,27 @@ export function MobileTopBar() {
         }}
         className="text-base font-bold tracking-tight text-slate-900 dark:text-white whitespace-nowrap shrink-0"
       >
-        Sonara
+        Easvarafy
       </button>
 
       {/* Center slot intentionally stays open for the top-center Dynamic Island */}
 
-      <button
-        type="button"
-        onClick={() => setActiveTab('settings')}
-        aria-label="Open settings"
-        className={cn(
-          'min-h-[40px] min-w-[40px] flex items-center justify-center rounded-full transition-colors',
-          activeTab === 'settings'
-            ? 'text-[var(--m3-primary)] bg-[var(--m3-primary-soft)]'
-            : 'text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10'
-        )}
-      >
-        <Settings className="w-5 h-5" />
-      </button>
+      <div className="flex items-center gap-1">
+        <MobileAccountButton />
+        <button
+          type="button"
+          onClick={() => setActiveTab('settings')}
+          aria-label="Open settings"
+          className={cn(
+            'min-h-[40px] min-w-[40px] flex items-center justify-center rounded-full transition-colors',
+            activeTab === 'settings'
+              ? 'text-[var(--m3-primary)] bg-[var(--m3-primary-soft)]'
+              : 'text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10'
+          )}
+        >
+          <Settings className="w-5 h-5" />
+        </button>
+      </div>
     </header>
   );
 }

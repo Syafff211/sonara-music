@@ -33,6 +33,7 @@ import {
   type LibraryTrackSortMode,
 } from '@/lib/metrolist/statsEngine';
 import { cn } from '@/lib/utils';
+import { apiUrl } from '@/lib/api/base';
 
 type LibraryTab = 'playlists' | 'liked' | 'history' | 'stats' | 'saved';
 type ViewLayout = 'grid' | 'list';
@@ -154,7 +155,7 @@ export function LibraryView() {
     setImporting(true);
     try {
       const res = await fetch(
-        `/api/music/detail?kind=playlist&id=${encodeURIComponent(pid)}&gl=${settings.region}`
+        apiUrl(`/api/music/detail?kind=playlist&id=${encodeURIComponent(pid)}&gl=${settings.region}`)
       );
       if (!res.ok) throw new Error('Failed');
       const data = (await res.json()) as {

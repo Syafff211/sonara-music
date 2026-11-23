@@ -53,6 +53,8 @@ import type {
   Track,
   UserPlaylist,
 } from '@/lib/metrolist/types';
+import { apiUrl } from '@/lib/api/base';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 declare global {
   interface Window {
@@ -212,6 +214,11 @@ export function useMusic(): MusicContextValue {
 }
 
 export function MusicProvider({ children }: { children: React.ReactNode }) {
+  // Guest playback is always allowed. Creating playlists / liking / saving
+  // requires an account, so those actions route through `requireAuth`, which
+  // opens the "Login dulu yuk" popup instead of failing silently.
+  const { requireAuth } = useAuth();
+
   const [hydrated, setHydrated] = useState(false);
   const [activeTab, setActiveTabState] = useState<NavTab>('home');
   const [detailTarget, setDetailTarget] = useState<DetailTarget | null>(null);
@@ -640,7 +647,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
       });
 
       try {
-        const res = await fetch(`/api/music/lyrics?${params.toString()}`);
+        const res = await fetch(apiUrl(`/api/music/lyrics?${params.toString()}`));
         const data = (await res.json()) as LyricsPayload;
         if (!cancelled) setLyrics(data);
       } catch {
@@ -661,7 +668,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
         radioFetchingRef.current = currentTrack.videoId;
         try {
           const res = await fetch(
-            `/api/music/up-next?videoId=${encodeURIComponent(currentTrack.videoId)}&gl=${settings.region}`
+            apiUrl(`/api/music/up-next?videoId=${encodeURIComponent(currentTrack.videoId)}&gl=${settings.region}`)
           );
           const data = (await res.json()) as { tracks?: Track[] };
           if (!cancelled && data.tracks && data.tracks.length > 0) {
@@ -688,11 +695,11 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
     if (typeof window === 'undefined') return;
 
     if (currentTrack && isPlaying) {
-      document.title = `▶ ${currentTrack.title} · ${currentTrack.artist} — Sonara`;
+      document.title = `▶ ${currentTrack.title} · ${currentTrack.artist} — Easvarafy`;
     } else if (currentTrack) {
-      document.title = `${currentTrack.title} — Sonara`;
+      document.title = `${currentTrack.title} — Easvarafy`;
     } else {
-      document.title = 'Sonara — Spatial Music';
+      document.title = 'Easvarafy — Dengerin Musik Tanpa Batas';
     }
 
     if (isPlaying && settings.backgroundPlay && currentTrack) {
@@ -980,7 +987,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: currentTrack.title,
         artist: currentTrack.artist,
-        album: currentTrack.album?.name || 'Sonara Music',
+        album: currentTrack.album?.name || 'Easvarafy Music',
         artwork: currentTrack.thumbnail
           ? [
               { src: currentTrack.thumbnail, sizes: '256x256', type: 'image/jpeg' },
@@ -1113,7 +1120,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
       showToast(`Starting radio from "${track.title}"`);
       try {
         const res = await fetch(
-          `/api/music/up-next?videoId=${encodeURIComponent(track.videoId)}&gl=${settings.region}`
+          apiUrl(`/api/music/up-next?videoId=${encodeURIComponent(track.videoId)}&gl=${settings.region}`)
         );
         const data = (await res.json()) as { tracks?: Track[] };
         if (data.tracks && data.tracks.length > 0) {
@@ -1168,6 +1175,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
 
   const toggleLike = useCallback(
     (track: Track) => {
+      if (!requireAuth('Login dulu yuk biar lagu ini tersimpan di Liked Songs kamu.')) return;
       setLikedTracks((prev) => {
         const exists = prev.some((t) => t.videoId === track.videoId);
         const next = exists
@@ -1178,11 +1186,21 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
         return next;
       });
     },
-    [showToast]
+    [requireAuth, showToast]
   );
 
   const createPlaylist = useCallback(
     (name: string, description?: string, initialTracks: Track[] = []) => {
+      if (!requireAuth('Login dulu yuk buat bikin playlist kamu sendiri.')) {
+        return {
+          id: 'login-required',
+          name: name.trim() || 'Untitled Playlist',
+          description: description?.trim() || '',
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          tracks: initialTracks,
+        } as UserPlaylist;
+      }
       const now = Date.now();
       const created: UserPlaylist = {
         id: `pl-${now}-${Math.random().toString(36).slice(2, 6)}`,
@@ -1200,7 +1218,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
       showToast(`Created playlist "${created.name}"`);
       return created;
     },
-    [showToast]
+    [requireAuth, showToast]
   );
 
   const renamePlaylist = useCallback((id: string, name: string) => {
@@ -1256,6 +1274,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
 
   const addTrackToPlaylist = useCallback(
     (playlistId: string, track: Track) => {
+      if (!requireAuth('Login dulu yuk biar bisa nyimpen lagu ke playlist.')) return;
       setPlaylists((prev) => {
         const next = prev.map((pl) => {
           if (pl.id !== playlistId) return pl;
@@ -1274,7 +1293,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
         targetPl ? `Saved to "${targetPl.name}"` : 'Added track to playlist'
       );
     },
-    [playlists, showToast]
+    [playlists, requireAuth, showToast]
   );
 
   const removeTrackFromPlaylist = useCallback(
@@ -1304,6 +1323,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
 
   const toggleSaveCollection = useCallback(
     (item: Omit<SavedCollectionItem, 'savedAt'>) => {
+      if (!requireAuth('Login dulu yuk buat simpan album & playlist ke Library.')) return;
       setSavedCollection((prev) => {
         const exists = prev.some(
           (i) => i.kind === item.kind && i.id === item.id
@@ -1316,7 +1336,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
         return next;
       });
     },
-    [showToast]
+    [requireAuth, showToast]
   );
 
   const addSearchHistory = useCallback((query: string) => {
@@ -1365,12 +1385,12 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
         // ignore
       }
     }
-    showToast('Preferences reset to Sonara defaults');
+    showToast('Preferences reset to Easvarafy defaults');
   }, [showToast]);
 
   const exportLibraryBackup = useCallback(() => {
     const payload = {
-      app: 'Sonara',
+      app: 'Easvarafy',
       version: 1,
       exportedAt: new Date().toISOString(),
       history,

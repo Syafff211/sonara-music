@@ -1,6 +1,6 @@
 <div align="center">
 
-# Sonara | Spatial Music
+# Easvarafy | Spatial Music
 
 ### Klien Web YouTube Music Modern Berbasis Next.js 15, Material 3 Expressive, Pure Black AMOLED, Mesin Lirik Sinkron 5-Gaya, Ambient AOD & Opt-In Physics Liquid Glass
 
@@ -35,13 +35,13 @@
 
 ---
 
-## Tentang Sonara
+## Tentang Easvarafy
 
-**Sonara** adalah aplikasi web klien **YouTube Music** modern berbasis **Next.js App Router** yang menggabungkan pengalaman desain **Material 3 Expressive** & **Pure Black AMOLED**, **Dynamic Color** adaptif dari sampul album, **Dynamic Island Pro** (dengan dukungan *Background Picture-in-Picture*), serta efek opt-in **Physics Liquid Glass** (menggunakan simulasi refraksi Hukum Snell + filter SVG `feDisplacementMap` + *specular rim highlight*).
+**Easvarafy** adalah aplikasi web klien **YouTube Music** modern berbasis **Next.js App Router** yang menggabungkan pengalaman desain **Material 3 Expressive** & **Pure Black AMOLED**, **Dynamic Color** adaptif dari sampul album, **Dynamic Island Pro** (dengan dukungan *Background Picture-in-Picture*), serta efek opt-in **Physics Liquid Glass** (menggunakan simulasi refraksi Hukum Snell + filter SVG `feDisplacementMap` + *specular rim highlight*).
 
-Secara fungsional, Sonara memadukan mesin rekomendasi, antrean, dan animasi lirik per-kata bergaya **Metrolist** dengan fitur analitik, audio tools, dan antarmuka ekspresif bergaya **ArchiveTune** — termasuk **Equalizer 5-Band**, **Sleep Timer (End of Current Track)**, **Ambient Always-On Display (AOD)**, **Shareable Lyrics Card Studio**, **Listening Stats & Year-in-Music Recap**, **Auto Top Mixes**, **Custom Playlist Tags**, serta **Dual-Scope Search (Online + My Library)**.
+Secara fungsional, Easvarafy memadukan mesin rekomendasi, antrean, dan animasi lirik per-kata bergaya **Metrolist** dengan fitur analitik, audio tools, dan antarmuka ekspresif bergaya **ArchiveTune** — termasuk **Equalizer 5-Band**, **Sleep Timer (End of Current Track)**, **Ambient Always-On Display (AOD)**, **Shareable Lyrics Card Studio**, **Listening Stats & Year-in-Music Recap**, **Auto Top Mixes**, **Custom Playlist Tags**, serta **Dual-Scope Search (Online + My Library)**.
 
-> **Performa Awal Ringan:** Saat web pertama kali dibuka, Sonara menggunakan gaya dock ringan (`dockStyle: 'default'`) agar rendering cepat dan hemat sumber daya. Mode **Liquid Glass** berbasis SVG refraksi dapat diaktifkan kapan saja melalui menu **Settings → Appearance**.
+> **Performa Awal Ringan:** Saat web pertama kali dibuka, Easvarafy menggunakan gaya dock ringan (`dockStyle: 'default'`) agar rendering cepat dan hemat sumber daya. Mode **Liquid Glass** berbasis SVG refraksi dapat diaktifkan kapan saja melalui menu **Settings → Appearance**.
 
 ---
 
@@ -51,10 +51,10 @@ Secara fungsional, Sonara memadukan mesin rekomendasi, antrean, dan animasi liri
 
 | Now Playing (V9 Expressive + Dynamic Color) | Audio Equalizer 5-Band + Sub-Bass |
 | :---: | :---: |
-| <img src="./docs/screenshots/now-playing-desktop.png" alt="Sonara Now Playing Desktop" width="100%" /> | <img src="./docs/screenshots/equalizer-desktop.png" alt="Sonara Audio Equalizer Desktop" width="100%" /> |
+| <img src="./docs/screenshots/now-playing-desktop.png" alt="Easvarafy Now Playing Desktop" width="100%" /> | <img src="./docs/screenshots/equalizer-desktop.png" alt="Easvarafy Audio Equalizer Desktop" width="100%" /> |
 
 <div align="center">
-  <img src="./docs/screenshots/aod-desktop.png" alt="Sonara Ambient Always-On Display Desktop" width="92%" />
+  <img src="./docs/screenshots/aod-desktop.png" alt="Easvarafy Ambient Always-On Display Desktop" width="92%" />
   <br />
   <sub><b>Ambient Always-On Display (AOD)</b> — Mode latar Adaptive Blurred Art, jam digital bold, sampul Squircle, ticker lirik sinkron real-time, & kontrol OLED hemat layar.</sub>
 </div>
@@ -226,13 +226,13 @@ Seluruh pemanggilan ke `ytmusic-api` dan `LRCLIB` dijalankan pada **Next.js API 
 
 ### Prasyarat
 - **Node.js** versi `20.x` atau lebih baru
-- **npm** (bawaan Node.js) atau **Bun** (`bun.lock` tersedia di repositori)
+- **npm** (bawaan Node.js) — `package-lock.json` tersedia di repositori
 - Koneksi internet untuk mengambil katalog YouTube Music dan lirik LRCLIB
 
 ### 1. Clone Repositori
 
 ```bash
-git clone https://github.com/sannnproject/Sonara-Music.git
+git clone https://github.com/sannnproject/Easvarafy-Music.git
 ```
 
 ### 2. Pasang Dependensi
@@ -336,7 +336,7 @@ npm run start
 Proyek ini dilisensikan di bawah **Apache License 2.0**. Lihat berkas [`LICENSE`](./LICENSE) untuk rincian lengkap mengenai hak penggunaan, modifikasi, dan distribusi.
 
 ```text
-Copyright 2026 Sonara — SANN404 FORUM GROUP
+Copyright 2026 Easvarafy — SANN404 FORUM GROUP
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

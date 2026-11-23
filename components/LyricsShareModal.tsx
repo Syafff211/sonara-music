@@ -255,10 +255,10 @@ export function LyricsShareModal({ open, onClose }: LyricsShareModalProps) {
         cursorY += lineHeight;
       }
 
-      // Clean Sonara signature footer
+      // Clean Easvarafy signature footer
       ctx.fillStyle = activeTheme.mutedColor;
       ctx.font = '600 28px system-ui, -apple-system, sans-serif';
-      ctx.fillText('Sonara', pad, canvas.height - pad);
+      ctx.fillText('Easvarafy', pad, canvas.height - pad);
 
       const dataUrl = canvas.toDataURL('image/png');
       const link = document.createElement('a');
@@ -391,7 +391,7 @@ export function LyricsShareModal({ open, onClose }: LyricsShareModalProps) {
                       className="text-[11px] font-semibold tracking-wide"
                       style={{ color: activeTheme.mutedColor }}
                     >
-                      Sonara
+                      Easvarafy
                     </span>
                     <Sparkles
                       className="w-3.5 h-3.5"

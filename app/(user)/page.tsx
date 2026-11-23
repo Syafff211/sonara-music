@@ -17,7 +17,7 @@ import { SearchView } from '@/components/SearchView';
 import { SettingsView } from '@/components/SettingsView';
 import { Sidebar } from '@/components/Sidebar';
 
-function SonoraShell() {
+function EasvarafyShell() {
   const {
     activeTab,
     detailTarget,
@@ -84,7 +84,7 @@ function SonoraShell() {
 export default function Page() {
   return (
     <MusicProvider>
-      <SonoraShell />
+      <EasvarafyShell />
     </MusicProvider>
   );
 }

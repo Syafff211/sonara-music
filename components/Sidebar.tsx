@@ -11,6 +11,7 @@ import {
   Settings,
 } from 'lucide-react';
 import { useMusic } from './MusicProvider';
+import { SidebarAccount } from './auth/AccountMenu';
 import type { NavTab } from '@/lib/metrolist/types';
 import { cn } from '@/lib/utils';
 
@@ -45,7 +46,7 @@ export function Sidebar() {
             onClick={() => setActiveTab('home')}
             className="text-xl font-bold tracking-tight text-slate-900 dark:text-white whitespace-nowrap shrink-0 text-left"
           >
-            Sonara
+            Easvarafy
           </button>
         </div>
 
@@ -124,6 +125,9 @@ export function Sidebar() {
           </div>
         </div>
       </div>
+
+      {/* Account / login entry */}
+      <SidebarAccount className="mt-2" />
     </aside>
   );
 }

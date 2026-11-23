@@ -370,12 +370,12 @@ export function SettingsView() {
     settings.theme === 'dark'
       ? settings.pureBlack
         ? 'Pure Black AMOLED'
-        : 'Sonara Dark'
-      : 'Sonara Light';
+        : 'Easvarafy Dark'
+      : 'Easvarafy Light';
 
   return (
     <div className="space-y-6 pb-10 max-w-4xl mx-auto">
-      {/* Sonara Material 3 Settings Top Bar */}
+      {/* Easvarafy Material 3 Settings Top Bar */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
@@ -467,7 +467,7 @@ export function SettingsView() {
                 <div className="min-w-0">
                   <p className="text-[14.5px] font-semibold">Theme Mode</p>
                   <p className="text-[12.5px] opacity-60">
-                    Sonara Material 3 surface styling
+                    Easvarafy Material 3 surface styling
                   </p>
                 </div>
               </div>
@@ -1872,7 +1872,7 @@ export function SettingsView() {
               <PreferenceRow
                 icon={Upload}
                 title="Restore from Backup"
-                description="Import a previously exported Sonara JSON backup file"
+                description="Import a previously exported Easvarafy JSON backup file"
                 onClick={() => fileInputRef.current?.click()}
                 trailing={
                   <span className="px-3.5 py-1.5 rounded-full bg-black/[0.06] dark:bg-white/[0.08] text-[12px] font-semibold">
@@ -1912,7 +1912,7 @@ export function SettingsView() {
               title="Clear Listening History"
               description={
                 history.length > 0
-                  ? `Resets Sonara Speed Dial & Quick Picks (${history.length} plays)`
+                  ? `Resets Easvarafy Speed Dial & Quick Picks (${history.length} plays)`
                   : 'Listening history is already empty'
               }
               accentTint="#F43F5E"
@@ -2064,9 +2064,9 @@ export function SettingsView() {
               <Info className="w-5 h-5" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[15px] font-bold">Sonara Music Client</p>
+              <p className="text-[15px] font-bold">Easvarafy Music Client</p>
               <p className="text-[12.5px] opacity-65 mt-0.5 leading-relaxed">
-                Powered by ytmusic-api · Sonara recommendation & queue engine · Dynamic Island Pro background player
+                Powered by ytmusic-api · Easvarafy recommendation & queue engine · Dynamic Island Pro background player
               </p>
             </div>
           </div>

@@ -19,6 +19,7 @@ import { formatDuration } from '@/lib/metrolist/lyrics';
 import { SEED_TRACKS } from '@/lib/metrolist/seed';
 import type { AlbumSummary, HomeShelfItem, Track } from '@/lib/metrolist/types';
 import { cn } from '@/lib/utils';
+import { apiUrl } from '@/lib/api/base';
 
 const CHART_QUERIES = [
   { id: 'top-songs', label: 'Top Songs', query: 'top music charts hits 2026', type: 'songs' },
@@ -70,7 +71,7 @@ export function ChartsView() {
       setLoading(true);
       try {
         const res = await fetch(
-          `/api/music/search?q=${encodeURIComponent(searchQuery)}&type=${searchType}&gl=${settings.region}`
+          apiUrl(`/api/music/search?q=${encodeURIComponent(searchQuery)}&type=${searchType}&gl=${settings.region}`)
         );
         const data = (await res.json()) as { results?: HomeShelfItem[] };
         if (!cancelled) {
@@ -102,7 +103,7 @@ export function ChartsView() {
     const loadReleases = async () => {
       try {
         const res = await fetch(
-          `/api/music/search?q=${encodeURIComponent('new album release 2026')}&type=albums&gl=${settings.region}`
+          apiUrl(`/api/music/search?q=${encodeURIComponent('new album release 2026')}&type=albums&gl=${settings.region}`)
         );
         if (!res.ok) return;
         const data = (await res.json()) as { results?: HomeShelfItem[] };

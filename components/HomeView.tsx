@@ -41,6 +41,7 @@ import {
   buildSpeedDial,
 } from '@/lib/metrolist/recommendations';
 import type { HomeShelf, HomeShelfItem, Track } from '@/lib/metrolist/types';
+import { apiUrl } from '@/lib/api/base';
 
 const emptySubscribe = () => () => {};
 
@@ -192,7 +193,7 @@ export function HomeView() {
       if (settings.ytCookie.trim()) {
         headers['x-yt-cookie'] = settings.ytCookie.trim();
       }
-      const res = await fetch(`/api/music/home?gl=${settings.region}`, {
+      const res = await fetch(apiUrl(`/api/music/home?gl=${settings.region}`), {
         headers,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -213,7 +214,7 @@ export function HomeView() {
         if (settings.ytCookie.trim()) {
           headers['x-yt-cookie'] = settings.ytCookie.trim();
         }
-        const res = await fetch(`/api/music/home?gl=${settings.region}`, {
+        const res = await fetch(apiUrl(`/api/music/home?gl=${settings.region}`), {
           headers,
         });
         if (!res.ok) return;
@@ -253,7 +254,7 @@ export function HomeView() {
             ? 'Pop Indonesia hits terbaru'
             : genre.query;
         const res = await fetch(
-          `/api/music/search?q=${encodeURIComponent(regionalQuery)}&type=songs&gl=${settings.region}`,
+          apiUrl(`/api/music/search?q=${encodeURIComponent(regionalQuery)}&type=songs&gl=${settings.region}`),
           { headers }
         );
         if (!res.ok) return;
@@ -303,7 +304,7 @@ export function HomeView() {
     setMoodLoading(true);
     try {
       const res = await fetch(
-        `/api/music/search?q=${encodeURIComponent(query)}&type=songs&gl=${settings.region}`
+        apiUrl(`/api/music/search?q=${encodeURIComponent(query)}&type=songs&gl=${settings.region}`)
       );
       if (!res.ok) throw new Error('Mood fetch failed');
       const data = (await res.json()) as { results?: HomeShelfItem[] };
