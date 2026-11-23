@@ -37,6 +37,7 @@ import type {
   Track,
 } from '@/lib/metrolist/types';
 import { cn } from '@/lib/utils';
+import { apiUrl } from '@/lib/api/base';
 
 function formatDuration(seconds: number | null): string {
   if (!seconds || !Number.isFinite(seconds) || seconds <= 0) return '';
@@ -219,7 +220,7 @@ export function SearchView() {
           headers['x-yt-cookie'] = settings.ytCookie.trim();
         }
         const res = await fetch(
-          `/api/music/search?q=${encodeURIComponent(trimmed)}&type=${tab}&gl=${settings.region}`,
+          apiUrl(`/api/music/search?q=${encodeURIComponent(trimmed)}&type=${tab}&gl=${settings.region}`),
           { headers }
         );
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -271,7 +272,7 @@ export function SearchView() {
     suggestTimeoutRef.current = setTimeout(async () => {
       try {
         const res = await fetch(
-          `/api/music/search?suggest=1&q=${encodeURIComponent(trimmed)}&gl=${settings.region}`
+          apiUrl(`/api/music/search?suggest=1&q=${encodeURIComponent(trimmed)}&gl=${settings.region}`)
         );
         if (!res.ok) return;
         const data = (await res.json()) as { suggestions?: string[] };

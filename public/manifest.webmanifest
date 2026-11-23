@@ -1,0 +1,21 @@
+{
+  "name": "Easvarafy",
+  "version": "1.0.0",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#111216",
+  "theme_color": "#7C5CFF",
+  "lang": "id",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "short_name": "Easvarafy",
+  "description": "Dengerin Musik Tanpa Batas"
+}

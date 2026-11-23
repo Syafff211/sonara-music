@@ -5,3 +5,7 @@ coverage/
 *.log
 .env*
 !.env.example
+.static-export-stash/
+out/
+android/
+tsconfig.tsbuildinfo

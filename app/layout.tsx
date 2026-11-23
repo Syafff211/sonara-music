@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, DM_Sans, JetBrains_Mono } from 'next/font/google';
+import { AuthProvider } from '@/components/auth/AuthProvider';
 import './globals.css';
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -24,20 +25,28 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Sonara — Spatial Music',
+  title: 'Easvarafy — Dengerin Musik Tanpa Batas',
   description:
-    'iOS 27 Liquid Glass YouTube Music web client powered by ytmusic-api and Sonara recommendation & queue engine.',
+    'Easvarafy — Dengerin Musik Tanpa Batas. Pemutar musik modern dengan lirik sinkron, equalizer, playlist, dan sleep timer.',
+  applicationName: 'Easvarafy',
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   openGraph: {
-    title: 'Sonara — Spatial Music',
+    title: 'Easvarafy — Dengerin Musik Tanpa Batas',
     description:
-      'iOS 27 Liquid Glass YouTube Music web client powered by ytmusic-api and Sonara recommendation & queue engine.',
+      'Easvarafy — Dengerin Musik Tanpa Batas. Pemutar musik modern dengan lirik sinkron, equalizer, playlist, dan sleep timer.',
+    siteName: 'Easvarafy',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sonara — Spatial Music',
+    title: 'Easvarafy — Dengerin Musik Tanpa Batas',
     description:
-      'iOS 27 Liquid Glass YouTube Music web client powered by ytmusic-api and Sonara recommendation & queue engine.',
+      'Easvarafy — Dengerin Musik Tanpa Batas. Pemutar musik modern dengan lirik sinkron, equalizer, playlist, dan sleep timer.',
   },
 };
 
@@ -48,7 +57,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="id"
       className={`dark ${plusJakarta.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
@@ -56,7 +65,7 @@ export default function RootLayout({
         className="min-h-screen bg-[var(--m3-bg)] text-[#1A1C20] dark:text-[#E6E8EE] selection:bg-[var(--m3-primary-soft)] selection:text-[var(--m3-primary)] transition-colors duration-200"
         suppressHydrationWarning
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

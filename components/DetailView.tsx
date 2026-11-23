@@ -26,6 +26,7 @@ import {
 } from '@/lib/metrolist/statsEngine';
 import type { AlbumSummary, PlaylistSummary, Track } from '@/lib/metrolist/types';
 import { cn } from '@/lib/utils';
+import { apiUrl } from '@/lib/api/base';
 
 interface RemoteDetailData {
   kind: 'album' | 'playlist' | 'artist';
@@ -75,9 +76,11 @@ export function DetailView() {
       setError(null);
       try {
         const res = await fetch(
-          `/api/music/detail?kind=${detailTarget.kind}&id=${encodeURIComponent(
-            detailTarget.id
-          )}&gl=${settings.region}`
+          apiUrl(
+            `/api/music/detail?kind=${detailTarget.kind}&id=${encodeURIComponent(
+              detailTarget.id
+            )}&gl=${settings.region}`
+          )
         );
         if (!res.ok) throw new Error('Request failed');
         const data = (await res.json()) as RemoteDetailData;

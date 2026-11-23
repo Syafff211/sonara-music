@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
       }
 
       const lrcRes = await fetch(lrcUrl.toString(), {
-        headers: { 'User-Agent': 'SonoraMusicWeb/1.0 (https://github.com)' },
+        headers: { 'User-Agent': 'EasvarafyMusicWeb/1.0 (https://github.com)' },
         signal: AbortSignal.timeout(4500),
       });
 
