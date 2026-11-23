@@ -78,12 +78,18 @@ export default function AdminLoginPage() {
               Login user
             </Link>
           </p>
-          <Link
-            href="/"
-            className="block text-center text-[11.5px] text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-          >
-            Balik ke player
-          </Link>
+          <div className="flex items-center justify-center gap-2 text-[11.5px] text-slate-400 dark:text-slate-500">
+            <Link href="/" className="hover:text-slate-700 dark:hover:text-slate-300">
+              Balik ke player
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link
+              href="/admin/register"
+              className="hover:text-slate-700 dark:hover:text-slate-300"
+            >
+              Setup admin pertama
+            </Link>
+          </div>
         </div>
       }
     >

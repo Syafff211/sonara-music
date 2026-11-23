@@ -1,6 +1,6 @@
 <div align="center">
 
-# Easvarafy | Spatial Music
+# Easvarafy | Dengerin Musik Tanpa Batas
 
 ### Klien Web YouTube Music Modern Berbasis Next.js 15, Material 3 Expressive, Pure Black AMOLED, Mesin Lirik Sinkron 5-Gaya, Ambient AOD & Opt-In Physics Liquid Glass
 
@@ -117,6 +117,76 @@ Secara fungsional, Easvarafy memadukan mesin rekomendasi, antrean, dan animasi l
 
 ---
 
+## Akun, Auth & Admin
+
+Easvarafy memakai **Supabase Auth** hanya untuk identitas pengguna. Katalog musik
+(lagu, banner, cover, lirik) **tidak** disimpan di Supabase — tetap memakai route
+`/api/music/*` yang sudah ada (ytmusic-api + lyrics engine).
+
+| Halaman | Fungsi |
+| --- | --- |
+| `/login` | Email + password **atau** "Lanjutkan dengan Google" (OAuth `google`). Redirect otomatis: admin → `/admin/dashboard`, user → `/`. |
+| `/register` | Nama, email, password, konfirmasi. Validasi email valid, password min 8 karakter, konfirmasi harus sama. Profile dibuat otomatis dengan `role = 'user'`. |
+| `/forgot-password` | Kirim link reset (`resetPasswordForEmail`). |
+| `/reset-password` | Simpan password baru dari link email. |
+| `/auth/callback` + `/auth/complete` | Tukar kode PKCE Supabase jadi sesi (dipakai web & APK). |
+| `/admin/login` | **Khusus admin**, email + password saja (tanpa tombol Google). |
+| `/admin/register` | Bootstrap **admin pertama** — hanya aktif selama belum ada admin (dijaga fungsi `claim_admin_if_none()`). |
+| `/admin/dashboard` | Statistik user: total, admin, banned, pendaftar 7/30 hari. |
+| `/admin/users` | Cari/filter, ubah role user ↔ admin, ban/unban, hapus profile. |
+
+**Mode guest:** halaman utama tetap bisa dibuka tanpa login. Playback gratis untuk
+semua; membuat playlist, like lagu, atau menyimpan koleksi akan memunculkan popup
+**"Login dulu yuk"**.
+
+**Proteksi role:** membuka `/admin/*` tanpa role admin akan diarahkan ke `/login`.
+
+**Membuat admin pertama:** buka `/admin/register` sekali (atau daftar lewat `/register`
+lalu jalankan SQL di bawah), setelah itu semua pengaturan role dilakukan dari
+`/admin/users`.
+
+```sql
+-- cara manual: jadikan akun yang sudah terdaftar sebagai admin
+update public.profiles set role = 'admin' where email = 'email-kamu@example.com';
+```
+
+Setelah `role = 'admin'`, akun tersebut otomatis diarahkan ke `/admin/dashboard`
+setiap kali login.
+
+### Supabase: satu tabel saja
+
+```sql
+profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  email text,
+  name text,
+  avatar_url text,
+  role text not null default 'user' check (role in ('user','admin')),
+  is_banned boolean not null default false,
+  created_at timestamptz not null default now()
+)
+```
+
+- Trigger `on_auth_user_created` membuat baris profile otomatis (email maupun Google).
+- RLS: user hanya bisa `select`/`update` profile miliknya sendiri dan **tidak bisa**
+  menaikkan role-nya sendiri; admin bisa melihat & mengubah semua.
+- Playlist pribadi, liked songs, dan history tetap di `localStorage` (tidak dipindah).
+
+### Variabel lingkungan
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
+# opsional, hanya untuk build APK (static export):
+NEXT_PUBLIC_API_BASE=https://<domain-web-kamu>
+```
+
+Di dashboard Supabase → Authentication → URL Configuration, tambahkan
+`https://<domain>/auth/callback`, `https://<domain>/reset-password`, dan
+`com.easvarafy.app://auth/callback` (deep link APK) ke **Redirect URLs**.
+
+---
+
 ## Teknologi yang Digunakan
 
 | Kategori | Teknologi / Paket | Versi | Kegunaan di Project |
@@ -141,8 +211,20 @@ Secara fungsional, Easvarafy memadukan mesin rekomendasi, antrean, dan animasi l
 ```text
 .
 ├── app/
-│   ├── layout.tsx                   # Root layout, Google Fonts, metadata SEO & OpenGraph
-│   ├── page.tsx                     # Shell utama aplikasi (Sidebar, MobileNav, Views, Player)
+│   ├── layout.tsx                   # Root layout, Google Fonts, metadata SEO & OpenGraph, AuthProvider
+│   ├── (user)/page.tsx              # Shell aplikasi user (Sidebar, MobileNav, Views, Player) — mobile-first
+│   ├── admin/                       # Web admin (slug /admin)
+│   │   ├── layout.tsx               # Shell + guard admin (non-admin -> /login)
+│   │   ├── login/page.tsx           # Login admin (email + password, tanpa Google)
+│   │   ├── dashboard/page.tsx       # Statistik user & user terbaru
+│   │   └── users/page.tsx           # Kelola role, ban/unban, hapus, cari & filter user
+│   ├── login/page.tsx               # Login user (email+password & Google)
+│   ├── register/page.tsx            # Registrasi + validasi & pembuatan profile
+│   ├── forgot-password/page.tsx     # Kirim link reset password
+│   ├── reset-password/page.tsx      # Simpan password baru
+│   ├── auth/
+│   │   ├── callback/route.ts        # Handler redirect OAuth/konfirmasi Supabase
+│   │   └── complete/page.tsx        # Tukar kode PKCE -> sesi (web & APK)
 │   ├── globals.css                  # Tailwind v4 & token desain Material 3 / AMOLED / Glass
 │   └── api/music/
 │       ├── home/route.ts            # GET rak beranda, mood picks, & quick pick candidates
@@ -171,8 +253,14 @@ Secara fungsional, Easvarafy memadukan mesin rekomendasi, antrean, dan animasi l
 │   ├── DynamicIslandPopup.tsx       # Background Player Popup (Document PiP / Video PiP / Overlay)
 │   ├── LiquidGlassSurface.tsx       # Layer opt-in SVG Liquid Glass berbasis refraksi
 │   ├── MiniPlayer.tsx               # Pemutar mini mengambang (desktop)
-│   ├── Sidebar.tsx                  # Navigasi sidebar desktop + daftar playlist cepat
-│   ├── MobileNav.tsx                # Navigasi 4-tab mobile + mini player mobile
+│   ├── Sidebar.tsx                  # Navigasi sidebar desktop + daftar playlist cepat + akun
+│   ├── MobileNav.tsx                # Navigasi 4-tab mobile + mini player mobile + tombol akun
+│   ├── auth/
+│   │   ├── AuthProvider.tsx         # Sesi Supabase, role, signIn/signUp/Google, deep link APK
+│   │   ├── AuthUI.tsx               # Shell form auth, field, tombol, logo Google
+│   │   ├── AccountMenu.tsx          # Avatar, menu akun, CTA login sidebar/topbar
+│   │   └── LoginPromptDialog.tsx    # Popup "Login dulu yuk" untuk aksi guest
+│   ├── admin/AdminUI.tsx            # Kartu statistik, badge, dialog konfirmasi admin
 │   ├── ArtworkImage.tsx             # Komponen gambar sampul dengan fallback bersih
 │   ├── PlaylistPickerModal.tsx      # Modal tambah lagu ke playlist
 │   ├── TrackContextMenu.tsx         # Menu aksi lagu (Play Next, Add to Queue, Radio, Save)
@@ -197,11 +285,21 @@ Secara fungsional, Easvarafy memadukan mesin rekomendasi, antrean, dan animasi l
 │   │   └── refraction.test.ts       # Unit test fisika refraksi & pembangkitan peta SVG
 │   ├── server/
 │   │   └── ytmusic.ts               # Client wrapper & normalizer ytmusic-api sisi server
+│   ├── supabase.ts                  # Supabase client (auth + profiles saja)
+│   ├── auth/
+│   │   ├── types.ts                 # Tipe Profile, role, helper nama/initials
+│   │   ├── profile.ts               # fetchProfile, ensureProfile, homeForRole
+│   │   └── native.ts                # Capacitor Browser/App + deep link OAuth
+│   ├── admin/users.ts               # Query & mutasi user untuk panel admin
+│   ├── api/base.ts                  # Prefix NEXT_PUBLIC_API_BASE untuk build APK
 │   └── utils.ts                     # Helper `cn()` (clsx + tailwind-merge)
 ├── hooks/
 │   └── use-mobile.ts                # Hook deteksi breakpoint mobile
 ├── docs/screenshots/                # Aset tangkapan layar preview terbaru
-├── next.config.ts                   # Konfigurasi Next.js (standalone output & remotePatterns)
+├── scripts/build-static.mjs         # Static export untuk Capacitor (route server dipulihkan otomatis)
+├── capacitor.config.ts              # com.easvarafy.app, webDir: out, androidScheme https
+├── .github/workflows/build-apk.yml  # CI: build static -> cap sync -> assembleDebug -> artifact APK
+├── next.config.ts                   # Next.js config (standalone web / export untuk APK, remotePatterns)
 ├── vercel.json                      # Konfigurasi fungsi serverless Vercel (`maxDuration: 25`)
 └── LICENSE                          # Lisensi Apache 2.0
 ```
@@ -291,6 +389,54 @@ npx --yes tsx --test \
 - **`lib/metrolist/logic.test.ts` (9 tes)**: Validasi filter `hideVideoSongs` sebelum slicing *Quick Picks*, deduplikasi `videoId`, *Keep Listening*, *Forgotten Favorites*, *QueueEngine* (*playNext*, *append*, *shuffle pin*, *repeat*, *radio deduplication*), parser LRC, resolver tema AMOLED/Dynamic Color, dan strategi *Background Popup*.
 - **`lib/metrolist/lyricsEngine.test.ts` (5 tes)**: Validasi parsing enhanced word timestamps `<mm:ss.xx>`, global offset, fisika 5 gaya animasi lirik (*Apple*, *Braccato*, *Expressive*, *Simple*, *None*), *progressive blur*, dan generator jalur SVG *Squiggly Seekbar*.
 - **`lib/metrolist/statsEngine.test.ts` (7 tes)**: Validasi filter periode statistik (`7d`, `30d`, `year`, `all`), agregasi menit & porsi artis, pencarian pustaka lokal + tag, pengurutan track, pembangkitan **Auto Top Mixes** (*My Top Mix*, *On Repeat*, *Rediscover*), total durasi, serta helper **Equalizer**.
+
+---
+
+## Build APK Android (Capacitor)
+
+Aplikasi Android dibangun dari **static export** Next.js lalu dibungkus Capacitor.
+
+```bash
+# 1. build static ke ./out  (route server dipindah sementara, selalu dipulihkan)
+NEXT_PUBLIC_API_BASE=https://domain-web-kamu npm run build:static
+
+# 2. tambahkan platform + sinkronkan
+npx cap add android      # sekali saja
+npx cap sync android
+
+# 3. build debug APK
+cd android && ./gradlew assembleDebug
+# hasil: android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+Konfigurasi: `capacitor.config.ts` (`appId: com.easvarafy.app`, `webDir: out`,
+`androidScheme: https`).
+
+**Login Google di APK.** `signInWithOAuth` dibuka lewat `@capacitor/browser`;
+Supabase lalu redirect ke deep link `com.easvarafy.app://auth/callback` yang
+ditangkap `@capacitor/app` (`appUrlOpen` + `getLaunchUrl`), kode PKCE ditukar jadi
+sesi, browser sheet ditutup, dan user diarahkan ke halaman yang tepat — tidak
+berhenti di halaman putih.
+
+**Kenapa APK butuh `NEXT_PUBLIC_API_BASE`?** Static export tidak punya server,
+sedangkan route `/api/music/*` (sumber musik yang sama seperti versi web) berjalan
+di deployment web. `lib/api/base.ts` hanya menambahkan prefix origin untuk build
+APK; di web nilainya kosong sehingga tetap memanggil path relatif.
+
+### GitHub Actions → `app-debug.apk`
+
+Workflow `.github/workflows/build-apk.yml` berjalan saat push ke `main` atau
+manual (`workflow_dispatch`): checkout → Node 20 → install → build static →
+`cap sync android` → JDK 17 + Android SDK → `./gradlew assembleDebug` → upload
+artifact `easvarafy-app-debug-apk`.
+
+Tambahkan **GitHub Secrets**:
+
+| Secret | Isi |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://<project-ref>.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon/publishable key |
+| `NEXT_PUBLIC_API_BASE` | domain web Easvarafy (untuk route musik) |
 
 ---
 

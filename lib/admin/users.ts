@@ -105,6 +105,26 @@ export async function getUserStats(): Promise<{ stats: UserStats; error?: string
   };
 }
 
+/** True when at least one admin profile exists (used by the bootstrap flow). */
+export async function adminExists(): Promise<boolean> {
+  if (!isSupabaseConfigured) return true;
+  const { data, error } = await supabase.rpc('admin_exists');
+  if (error) return true; // fail closed: don't offer bootstrap on error
+  return Boolean(data);
+}
+
+/**
+ * First-run bootstrap: the very first account can claim the admin role while no
+ * admin exists yet. The check runs server-side (SECURITY DEFINER) so it cannot
+ * be bypassed from the client once an admin exists.
+ */
+export async function claimAdminIfNone(): Promise<{ claimed: boolean; error?: string }> {
+  if (!isSupabaseConfigured) return { claimed: false, error: 'Supabase belum dikonfigurasi.' };
+  const { data, error } = await supabase.rpc('claim_admin_if_none');
+  if (error) return { claimed: false, error: error.message };
+  return { claimed: Boolean(data) };
+}
+
 export async function setUserRole(id: string, role: UserRole): Promise<{ error?: string }> {
   const { error } = await supabase.from('profiles').update({ role }).eq('id', id);
   return error ? { error: error.message } : {};
